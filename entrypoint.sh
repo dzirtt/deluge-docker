@@ -5,12 +5,17 @@ PYTHON="/usr/bin/python"
 DELUGED="/usr/bin/deluged"
 
 if [ ! -f $DELUGE_CONFIG_DIR/auth ]; then
-    if [ -n $PASSWORD ] && [ -n $LOGIN ]; then
+    if [ -n "$PASSWORD" ] && [ -n "$LOGIN" ]; then
         echo $LOGIN:$PASSWORD:10 >> $DELUGE_CONFIG_DIR/auth
     else
         echo deluge:deluge:10 >> $DELUGE_CONFIG_DIR/auth
-        echo "you creditals set to default deluge:deluge\n To change it, create container with ENV vars LOGIN, PASSWORD and set them value"
+        echo -e "you creditals set to default deluge:deluge\n To change it, create container with ENV vars LOGIN, PASSWORD and set them value"
     fi
 fi
+
+if [ ! -f $DELUGE_CONFIG_DIR/core.conf ]; then
+    cp "$DELUGE_HOME/tmp/core.conf" $DELUGE_CONFIG_DIR/
+fi
+
 
 $PYTHON $DELUGED -d -c $DELUGE_CONFIG_DIR -L info
