@@ -16,7 +16,7 @@ RUN KEY=C5E6A5ED249AD24C && gpg --keyserver pgpkeys.mit.edu --recv-key $KEY && g
 
 RUN apt-get update 
 RUN apt-get --no-install-recommends -t jessie -qyy install sudo runit unzip wget zip
-RUN apt-get --no-install-recommends -t trusty -qyy install deluged python-libtorrent
+RUN apt-get --no-install-recommends -t trusty -qyy install deluged python-libtorrent deluge-console
 
 #for debug purpose
 RUN apt-get -qyy -t jessie install nano lsof 
@@ -24,7 +24,11 @@ RUN apt-get -qyy -t jessie install nano lsof
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN useradd -m -s /bin/nologin deluge
-RUN mkdir -p ${DELUGE_DATA_DIR} ${DELUGE_CONFIG_DIR} ${DELUGE_DATA_DIR}/autoadd ${DELUGE_HOME}/tmp
+RUN mkdir -p ${DELUGE_DATA_DIR} ${DELUGE_CONFIG_DIR} ${DELUGE_DATA_DIR}/autoadd ${DELUGE_HOME}/tmp/default
+
+#start deluged to create default config
+#kill deluged
+#copy default config from /root/.config/deluge to ${DELUGE_HOME}/tmp/default
 
 #copy predefined config files
 ADD core.conf ${DELUGE_HOME}/tmp
